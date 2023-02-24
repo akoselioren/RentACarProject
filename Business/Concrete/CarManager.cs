@@ -11,16 +11,31 @@ namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
-        ICarDal carDal;
+        ICarDal _carDal;
 
         public CarManager(ICarDal carDal)
         {
-            this.carDal = carDal;
+            _carDal = carDal;
         }
 
         public List<Car> GetAll()
         {
-           return carDal.GetAll();
+           return _carDal.GetAll();
+        }
+
+        public List<Car> GetAllCarsByBrandId(int id)
+        {
+            return _carDal.GetAll(c => c.BrandId == id);
+        }
+
+        public List<Car> GetAllCarsByColorId(int id)
+        {
+            return _carDal.GetAll(c => c.ColorId == id);
+        }
+
+        public List<Car> GetByUnitPrice(decimal min, decimal max)
+        {
+            return _carDal.GetAll(c => c.DailyPrice >= min && c.DailyPrice <= max);
         }
     }
 }

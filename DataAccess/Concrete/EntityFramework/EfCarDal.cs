@@ -1,5 +1,6 @@
 ﻿using DataAccess.Abstract;
 using Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,27 +14,48 @@ namespace DataAccess.Concrete.EntityFramework
     {
         public void Add(Car entity)
         {
-            throw new NotImplementedException();
+            using (RentACarContext context = new RentACarContext())
+            {
+                var addedEntity = context.Add(entity);
+                addedEntity.State = EntityState.Added;
+                context.SaveChanges();
+            }
         }
 
         public void Delete(Car entity)
         {
-            throw new NotImplementedException();
+            using (RentACarContext context = new RentACarContext())
+            {
+                var deletedEntity = context.Add(entity);
+                deletedEntity.State = EntityState.Deleted;
+                context.SaveChanges();
+            }
         }
 
         public Car Get(Expression<Func<Car, bool>> filter)
         {
-            throw new NotImplementedException();
+            using (RentACarContext context = new RentACarContext())
+            {
+                return context.Set<Car>().SingleOrDefault(filter);
+            }
         }
 
         public List<Car> GetAll(Expression<Func<Car, bool>> filter = null)
         {
-            throw new NotImplementedException();
+            using (RentACarContext context = new RentACarContext())
+            {
+                return filter == null ? context.Set<Car>().ToList() : context.Set<Car>().Where(filter).ToList();
+            }
         }
 
         public void Update(Car entity)
         {
-            throw new NotImplementedException();
+            using (RentACarContext context = new RentACarContext())
+            {
+                var updatedEntity = context.Add(entity);
+                updatedEntity.State = EntityState.Modified;
+                context.SaveChanges();
+            }
         }
     }
 }
