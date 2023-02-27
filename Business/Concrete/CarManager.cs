@@ -1,4 +1,7 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results.Abstract;
+using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -19,59 +22,68 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public void Add(Car car)
+        public IResult Add(Car car)
         {
             if (car.Description.Length >= 2 && car.DailyPrice > 0)
             {
                 _carDal.Add(car);
+                return new SuccessResult(CarMessages.CarAdded);
             }
             else
             {
                 Console.WriteLine("Dikkat Araba açıklaması minimum 2 karakter olmalıdır.!");
                 Console.WriteLine("Dikkat Araba günlük fiyatı 0'dan büyük olmalıdır.!");
+                return new ErrorResult(CarMessages.CarNameInvalid);
             }
         }
 
-        public void Delete(Car car)
+        public IResult Delete(Car car)
         {
             _carDal.Delete(car);
+            return new SuccessResult(CarMessages.CarDeleted);
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            return _carDal.GetAll();
+            if (DateTime.Now.Hour==00)
+            {
+                return new ErrorDataResult<List<Car>>(SystemMessages.MaintenanceTime);
+            }
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(),CarMessages.CarsListed);
         }
 
-        public List<Car> GetAllCarsByBrandId(int id)
+        public IDataResult<List<Car>> GetAllCarsByBrandId(int id)
         {
-            return _carDal.GetAll(c => c.BrandId == id);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id),CarMessages.CarsBrandListed);
         }
 
-        public List<Car> GetAllCarsByColorId(int id)
+        public IDataResult<List<Car>> GetAllCarsByColorId(int id)
         {
-            return _carDal.GetAll(c => c.ColorId == id);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id),CarMessages.CarsColorListed);
         }
 
-        public List<Car> GetById(int id)
+        public IDataResult<List<Car>> GetById(int id)
         {
-            return _carDal.GetAll(c => c.Id == id);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.Id == id),CarMessages.CarByIdListed);
         }
 
-        public List<CarDetailDto> GetCarDetails()
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return _carDal.GetCarDetails();
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(),CarMessages.CarDetailsListed);
         }
 
-        public void Update(Car car)
+        public IResult Update(Car car)
         {
             if (car.Description.Length >= 2 && car.DailyPrice > 0)
             {
                 _carDal.Update(car);
+                return new SuccessResult(CarMessages.CarUpdated);
             }
             else
             {
                 Console.WriteLine("Dikkat Araba açıklaması minimum 2 karakter olmalıdır.!");
                 Console.WriteLine("Dikkat Araba günlük fiyatı 0'dan büyük olmalıdır.!");
+                return new ErrorResult(CarMessages.CarNameInvalid);
             }
         }
     }
