@@ -24,6 +24,7 @@ namespace Business.Concrete
 
         public IResult Add(Car car)
         {
+
             if (car.Description.Length >= 2 && car.DailyPrice > 0)
             {
                 _carDal.Add(car);
@@ -45,31 +46,31 @@ namespace Business.Concrete
 
         public IDataResult<List<Car>> GetAll()
         {
-            if (DateTime.Now.Hour==00)
+            if (DateTime.Now.Hour == 14)
             {
                 return new ErrorDataResult<List<Car>>(SystemMessages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(),CarMessages.CarsListed);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), CarMessages.CarsListed);
         }
 
         public IDataResult<List<Car>> GetAllCarsByBrandId(int id)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id),CarMessages.CarsBrandListed);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id), CarMessages.CarsBrandListed);
         }
 
         public IDataResult<List<Car>> GetAllCarsByColorId(int id)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id),CarMessages.CarsColorListed);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id), CarMessages.CarsColorListed);
         }
 
-        public IDataResult<List<Car>> GetById(int id)
+        public IDataResult<Car> GetById(int id)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.Id == id),CarMessages.CarByIdListed);
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == id), CarMessages.CarByIdListed);
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(),CarMessages.CarDetailsListed);
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), CarMessages.CarDetailsListed);
         }
 
         public IResult Update(Car car)
