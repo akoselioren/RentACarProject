@@ -39,9 +39,10 @@ namespace WebAPI
         {
 
             services.AddControllers();
-            
+
             //services.AddSingleton<ICarService,CarManager>();
             //services.AddSingleton<ICarDal, EfCarDal>();
+            services.AddCors();
 
 
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
@@ -81,14 +82,15 @@ namespace WebAPI
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
             }
 
-            app.UseStaticFiles();
-
+           
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader());
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthentication();
 
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 

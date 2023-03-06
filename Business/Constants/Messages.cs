@@ -67,7 +67,8 @@ namespace Business.Constants
         public static string RentalInvalid = "Araç teslim alınmadığından dolayı kiralanamaz.!";
         public static string RentalsListed = "Kiralama işlemlerinin tümü listelendi";
         public static string RentalByIdListed = "Seçilen Kiralama işlemi listelendi";
-    
+        public static string RentalDetailsListed = "Kiralama detayları listelendi";
+
 
 
         public static string CarImageAdded = "Araç'a resim eklendi";
